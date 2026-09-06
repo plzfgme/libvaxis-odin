@@ -1,0 +1,7 @@
+.DS_Store
+*.bin
+*.exe
+*.o
+*.obj
+*.pdb
+*.dSYM/

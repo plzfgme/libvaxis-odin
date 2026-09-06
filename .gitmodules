@@ -1,0 +1,3 @@
+[submodule "libvaxis"]
+	path = libvaxis
+	url = https://github.com/rockorager/libvaxis.git
