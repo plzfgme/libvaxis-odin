@@ -42,6 +42,8 @@ Winsize :: struct {
 	rows, cols, x_pixel, y_pixel: u16,
 }
 
+Winsize_Callback :: vaxis_winsize_callback
+
 Color_Type :: enum c.int {
 	Default = 0,
 	Indexed = 1,
@@ -692,6 +694,14 @@ when ODIN_OS == .Windows {
 		return
 	}
 } else {
+	tty_notify_winsize :: proc(tty: ^TTY, callback: Winsize_Callback, ctx: rawptr = nil) -> Error {
+		return Error(vaxis_tty_notify_winsize(tty.raw, callback, ctx))
+	}
+
+	tty_remove_winsize_notify :: proc(tty: ^TTY, callback: Winsize_Callback, ctx: rawptr = nil) -> Error {
+		return Error(vaxis_tty_remove_winsize_notify(tty.raw, callback, ctx))
+	}
+
 	tty_read :: proc(tty: ^TTY, buffer: []u8) -> (length: int, err: Error) {
 		raw_length: c.size_t
 		err = Error(vaxis_tty_read(tty.raw, raw_data(buffer), c.size_t(len(buffer)), &raw_length))

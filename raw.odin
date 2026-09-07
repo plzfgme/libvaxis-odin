@@ -165,6 +165,8 @@ vaxis_winsize :: struct {
 	rows, cols, x_pixel, y_pixel: u16,
 }
 
+vaxis_winsize_callback :: proc "c" (ctx: rawptr)
+
 vaxis_color_type :: enum c.int {
 	VAXIS_COLOR_DEFAULT = 0,
 	VAXIS_COLOR_INDEXED = 1,
@@ -492,12 +494,14 @@ foreign vaxis_lib {
 	vaxis_image_draw               :: proc(image: ^vaxis_image, window: ^vaxis_window, options: vaxis_image_draw_options) -> vaxis_result ---
 	vaxis_image_cell_size          :: proc(image: ^vaxis_image, window: ^vaxis_window, cols, rows: ^u16) -> vaxis_result ---
 
-	vaxis_tty_new                :: proc(tty: ^^vaxis_tty) -> vaxis_result ---
-	vaxis_tty_new_with_allocator :: proc(allocator: ^vaxis_allocator, tty: ^^vaxis_tty) -> vaxis_result ---
-	vaxis_tty_free               :: proc(tty: ^vaxis_tty) ---
-	vaxis_tty_winsize            :: proc(tty: ^vaxis_tty, size: ^vaxis_winsize) -> vaxis_result ---
-	vaxis_tty_read               :: proc(tty: ^vaxis_tty, buffer: [^]u8, capacity: c.size_t, length: ^c.size_t) -> vaxis_result ---
-	vaxis_tty_next_event         :: proc(tty: ^vaxis_tty, parser: ^vaxis_parser, event: ^^vaxis_event) -> vaxis_result ---
+	vaxis_tty_new                   :: proc(tty: ^^vaxis_tty) -> vaxis_result ---
+	vaxis_tty_new_with_allocator    :: proc(allocator: ^vaxis_allocator, tty: ^^vaxis_tty) -> vaxis_result ---
+	vaxis_tty_free                  :: proc(tty: ^vaxis_tty) ---
+	vaxis_tty_winsize               :: proc(tty: ^vaxis_tty, size: ^vaxis_winsize) -> vaxis_result ---
+	vaxis_tty_notify_winsize        :: proc(tty: ^vaxis_tty, callback: vaxis_winsize_callback, ctx: rawptr) -> vaxis_result ---
+	vaxis_tty_remove_winsize_notify :: proc(tty: ^vaxis_tty, callback: vaxis_winsize_callback, ctx: rawptr) -> vaxis_result ---
+	vaxis_tty_read                  :: proc(tty: ^vaxis_tty, buffer: [^]u8, capacity: c.size_t, length: ^c.size_t) -> vaxis_result ---
+	vaxis_tty_next_event            :: proc(tty: ^vaxis_tty, parser: ^vaxis_parser, event: ^^vaxis_event) -> vaxis_result ---
 
 	vaxis_runtime_new                :: proc(tty: ^vaxis_tty, options: ^vaxis_runtime_options, runtime: ^^vaxis_runtime) -> vaxis_result ---
 	vaxis_runtime_new_with_allocator :: proc(allocator: ^vaxis_allocator, tty: ^vaxis_tty, options: ^vaxis_runtime_options, runtime: ^^vaxis_runtime) -> vaxis_result ---
